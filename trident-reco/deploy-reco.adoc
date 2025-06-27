@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: trident-reco/deploy-reco.html 
+keywords: deployment, deploy, trident, namespace 
+summary: Durante la distribuzione di Trident, utilizza i consigli elencati di seguito. 
+---
+= Implementazione
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Durante la distribuzione di Trident, utilizza i consigli elencati di seguito.
+
+
+
+== Eseguire l'implementazione in uno spazio dei nomi dedicato
+
+https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/["Spazi dei nomi"^] separazione amministrativa tra diverse applicazioni e costituisce un ostacolo alla condivisione delle risorse. Ad esempio, un PVC di uno spazio dei nomi non può essere utilizzato da un altro. Trident fornisce risorse PV a tutti i namespace nel cluster Kubernetes e sfrutta di conseguenza un account di servizio che ha elevato il Privileges.
+
+Inoltre, l'accesso al pod Trident potrebbe consentire a un utente di accedere alle credenziali del sistema di storage e ad altre informazioni sensibili. È importante assicurarsi che gli utenti delle applicazioni e le applicazioni di gestione non abbiano la possibilità di accedere alle definizioni degli oggetti Trident o ai pod stessi.
+
+
+
+== Utilizza quote e limiti di intervallo per controllare il consumo dello storage
+
+Kubernetes dispone di due funzionalità che, se combinate, offrono un potente meccanismo per limitare il consumo di risorse da parte delle applicazioni.  https://kubernetes.io/docs/concepts/policy/resource-quotas/#storage-resource-quota["meccanismo di quota dello storage"^]Consente all'amministratore di implementare limiti di consumo di capacità e conteggio degli oggetti globali e specifici della classe di storage in base al namespace. Inoltre, l'utilizzo di un https://kubernetes.io/docs/tasks/administer-cluster/limit-storage-consumption/#limitrange-to-limit-requests-for-storage["limite di intervallo"^] assicura che le richieste di PVC siano entro un valore minimo e massimo prima che la richiesta sia inoltrata al fornitore.
+
+Questi valori sono definiti in base allo spazio dei nomi, il che significa che ogni spazio dei nomi deve avere valori definiti che sono in linea con i requisiti delle risorse. Vedere qui per informazioni su https://netapp.io/2017/06/09/self-provisioning-storage-kubernetes-without-worry["come sfruttare le quote"^].

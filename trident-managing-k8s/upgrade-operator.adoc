@@ -1,0 +1,181 @@
+---
+sidebar: sidebar 
+permalink: trident-managing-k8s/upgrade-operator.html 
+keywords: upgrade, trident, methods, operator, tridentctl, helm 
+summary: 'È possibile aggiornare facilmente un"installazione Trident esistente utilizzando l"operatore.' 
+---
+= Aggiornare un'installazione Trident utilizzando l'operatore Trident o Helm
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile aggiornare Trident utilizzando l'operatore Trident manualmente o utilizzando Helm. È possibile eseguire l'aggiornamento da un'installazione dell'operatore Trident a un'altra installazione dell'operatore Trident o da un `tridentctl`'installazione a una versione dell'operatore Trident. Prima di aggiornare l'installazione di un operatore Trident, rivedere la link:upgrade-trident.html#select-an-upgrade-method["Selezionare un metodo di aggiornamento"]sezione.
+
+
+
+== Aggiornare un'installazione manuale
+
+È possibile eseguire l'aggiornamento da un'installazione dell'operatore Trident definita dall'ambito del cluster a un'altra installazione dell'operatore Trident definita dal cluster. Tutte le versioni 21,01 e successive di Trident utilizzano un operatore cluster-scoped.
+
+
+NOTE: Per eseguire l'aggiornamento da Trident installato utilizzando l'operatore con spazio dei nomi (versioni da 20,07 a 20,10), utilizza le istruzioni di aggiornamento di link:../earlier-versions.html["versione installata"]Trident.
+
+.A proposito di questa attività
+Trident fornisce un file bundle da utilizzare per installare l'operatore e creare oggetti associati per la versione di Kubernetes.
+
+* Per i cluster che eseguono Kubernetes 1,24, utilizzare link:https://github.com/NetApp/trident/tree/stable/v25.02/deploy/bundle_pre_1_25.yaml["bundle_pre_1_25.yaml"^].
+* Per i cluster che eseguono Kubernetes 1,25 o versione successiva, utilizzare link:https://github.com/NetApp/trident/tree/stable/v25.02/deploy/bundle_post_1_25.yaml["bundle_post_1_25.yaml"^].
+
+
+.Prima di iniziare
+Assicurarsi di utilizzare un cluster Kubernetes in esecuzione link:../trident-get-started/requirements.html["Una versione di Kubernetes supportata"].
+
+.Fasi
+. Verificare la versione di Trident:
++
+[listing]
+----
+./tridentctl -n trident version
+----
+. Eliminare l'operatore Trident utilizzato per installare l'istanza Trident corrente. Ad esempio, se si sta eseguendo l'aggiornamento da 23,07, eseguire il seguente comando:
++
+[listing]
+----
+kubectl delete -f 23.07.0/trident-installer/deploy/<bundle.yaml> -n trident
+----
+. Se l'installazione iniziale è stata personalizzata utilizzando `TridentOrchestrator` gli attributi, è possibile modificare l' `TridentOrchestrator`oggetto per modificare i parametri di installazione. Ciò potrebbe includere le modifiche apportate per specificare i registri di immagini Trident e CSI mirrorati per la modalità offline, abilitare i registri di debug o specificare i segreti di pull delle immagini.
+. Installa Trident usando il file YAML del bundle corretto per il tuo ambiente, dove _<bundle.yaml>_ si trova
+`bundle_pre_1_25.yaml` o `bundle_post_1_25.yaml` si basa sulla tua versione di Kubernetes. Ad esempio, se si sta installando Trident 25,02, eseguire il seguente comando:
++
+[listing]
+----
+kubectl create -f 25.02.0/trident-installer/deploy/<bundle.yaml> -n trident
+----
+
+
+
+
+== Aggiornare un'installazione Helm
+
+È possibile aggiornare un'installazione di Trident Helm.
+
+
+WARNING: Quando si aggiorna un cluster Kubernetes da 1,24 a 1,25 o versione successiva su `true` cui è installato Trident, è necessario aggiornare Values.yaml per impostarlo `excludePodSecurityPolicy` o aggiungerlo `--set excludePodSecurityPolicy=true` al `helm upgrade` comando prima di poter aggiornare il cluster.
+
+Se hai già aggiornato il tuo cluster Kubernetes dalla 1,24 alla 1,25 senza aggiornare il timone Trident, l'aggiornamento del timone non riuscirà. Per eseguire l'aggiornamento del timone, eseguire questi passaggi come prerequisiti:
+
+. Installare il plugin helm-mapkubeapis da https://github.com/helm/helm-mapkubeapis[].
+. Eseguire un ciclo di asciugatura per la release Trident nello spazio dei nomi in cui è installato Trident. In questo modo vengono elencate le risorse che verranno ripulite.
++
+[listing]
+----
+helm mapkubeapis --dry-run trident  --namespace trident
+----
+. Eseguire una corsa completa con il timone per eseguire la pulizia.
++
+[listing]
+----
+helm mapkubeapis trident  --namespace trident
+----
+
+
+.Fasi
+. Se si link:../trident-get-started/kubernetes-deploy-helm.html#deploy-the-trident-operator-and-install-trident-using-helm["Installato Trident utilizzando Helm"]utilizza , è possibile utilizzare `helm upgrade trident netapp-trident/trident-operator --version 100.2502.0` per eseguire l'aggiornamento in un solo passaggio. Se non è stato aggiunto il repo Helm o non è possibile utilizzarlo per l'aggiornamento:
++
+.. Scaricare la versione più recente di Trident dal sito link:https://github.com/NetApp/trident/releases/latest["La sezione _Assets_ su GitHub"^].
+.. Utilizzare il `helm upgrade` comando dove riflette la versione a cui `trident-operator-25.02.0.tgz` si desidera eseguire l'aggiornamento.
++
+[listing]
+----
+helm upgrade <name> trident-operator-25.02.0.tgz
+----
++
+
+NOTE: Se si impostano opzioni personalizzate durante l'installazione iniziale (ad esempio specificando registri privati e speculari per le immagini Trident e CSI), aggiungere il `helm upgrade` comando utilizzando `--set` per assicurarsi che tali opzioni siano incluse nel comando di aggiornamento, altrimenti i valori verranno ripristinati ai valori predefiniti.
+
+
+
+. Eseguire `helm list` per verificare che la versione di carta e app sia stata aggiornata. Esegui `tridentctl logs` per esaminare eventuali messaggi di debug.
+
+
+
+
+== Aggiornamento da un'installazione a un `tridentctl` operatore Trident
+
+È possibile eseguire l'aggiornamento alla versione più recente dell'operatore Trident da un `tridentctl`'installazione. I backend e i PVC esistenti saranno automaticamente disponibili.
+
+
+NOTE: Prima di passare da un metodo di installazione all'altro, vedere link:../trident-get-started/kubernetes-deploy.html#moving-between-installation-methods["Passaggio da un metodo di installazione all'altro"].
+
+.Fasi
+. Scarica la versione più recente di Trident.
++
+[listing]
+----
+# Download the release required [25.02.0]
+mkdir 25.02.0
+cd 25.02.0
+wget https://github.com/NetApp/trident/releases/download/v25.02.0/trident-installer-25.02.0.tar.gz
+tar -xf trident-installer-25.02.0.tar.gz
+cd trident-installer
+----
+. Creare il `tridentorchestrator` CRD dal manifesto.
++
+[listing]
+----
+kubectl create -f deploy/crds/trident.netapp.io_tridentorchestrators_crd_post1.16.yaml
+----
+. Implementare l'operatore con ambito cluster nello stesso namespace.
++
+[listing]
+----
+kubectl create -f deploy/<bundle-name.yaml>
+
+serviceaccount/trident-operator created
+clusterrole.rbac.authorization.k8s.io/trident-operator created
+clusterrolebinding.rbac.authorization.k8s.io/trident-operator created
+deployment.apps/trident-operator created
+podsecuritypolicy.policy/tridentoperatorpods created
+
+#Examine the pods in the Trident namespace
+NAME                                  READY   STATUS    RESTARTS   AGE
+trident-controller-79df798bdc-m79dc   6/6     Running   0          150d
+trident-node-linux-xrst8              2/2     Running   0          150d
+trident-operator-5574dbbc68-nthjv     1/1     Running   0          1m30s
+----
+. Creare una `TridentOrchestrator` CR per l'installazione di Trident.
++
+[listing]
+----
+cat deploy/crds/tridentorchestrator_cr.yaml
+apiVersion: trident.netapp.io/v1
+kind: TridentOrchestrator
+metadata:
+  name: trident
+spec:
+  debug: true
+  namespace: trident
+
+kubectl create -f deploy/crds/tridentorchestrator_cr.yaml
+
+#Examine the pods in the Trident namespace
+NAME                                READY   STATUS    RESTARTS   AGE
+trident-csi-79df798bdc-m79dc        6/6     Running   0          1m
+trident-csi-xrst8                   2/2     Running   0          1m
+trident-operator-5574dbbc68-nthjv   1/1     Running   0          5m41s
+----
+. Confermare che Trident è stato aggiornato alla versione prevista.
++
+[listing]
+----
+kubectl describe torc trident | grep Message -A 3
+
+Message:                Trident installed
+Namespace:              trident
+Status:                 Installed
+Version:                v25.02.0
+----
+

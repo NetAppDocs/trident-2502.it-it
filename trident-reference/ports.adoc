@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: trident-reference/ports.html 
+keywords: Trident, port, ports 
+summary: Ulteriori informazioni sulle porte che Trident comunica. 
+---
+= Porte Trident
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Ulteriori informazioni sulle porte utilizzate da Trident per la comunicazione.
+
+
+
+== Porte Trident
+
+Trident comunica sulle seguenti porte:
+
+[cols="2,4"]
+|===
+| Porta | Scopo 
+
+
+| 8443 | HTTPS backchannel 
+
+
+| 8001 | Endpoint delle metriche Prometheus 
+
+
+| 8000 | Server REST Trident 
+
+
+| 17546 | Porta della sonda liveness/readiness utilizzata dai pod demonset di Trident 
+|===
+
+NOTE: La porta della sonda liveness/Readiness può essere modificata durante l'installazione utilizzando il `--probe-port` flag. È importante assicurarsi che questa porta non venga utilizzata da un altro processo sui nodi di lavoro.

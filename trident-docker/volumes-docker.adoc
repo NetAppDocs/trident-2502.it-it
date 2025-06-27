@@ -1,0 +1,133 @@
+---
+sidebar: sidebar 
+permalink: trident-docker/volumes-docker.html 
+keywords: create volumes, Trident, trident for docker, docker, docker volume 
+summary: 'Per creare volumi, utilizzare i comandi standard `docker volume` con il nome del driver Trident specificato quando necessario.' 
+---
+= Lavorare con i volumi
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Puoi creare, clonare e rimuovere facilmente volumi utilizzando comandi standard `docker volume` con il nome del driver Trident specificato quando necessario.
+
+
+
+== Creare un volume
+
+* Creare un volume con un driver utilizzando il nome predefinito:
++
+[source, console]
+----
+docker volume create -d netapp --name firstVolume
+----
+* Creazione di un volume con un'istanza Trident specifica:
++
+[source, console]
+----
+docker volume create -d ntap_bronze --name bronzeVolume
+----
++
+
+NOTE: Se non si specifica alcuna link:volume-driver-options.html["opzioni"^], vengono utilizzate le impostazioni predefinite per il driver.
+
+* Eseguire l'override delle dimensioni predefinite del volume. Per creare un volume 20GiB con un driver, vedere l'esempio seguente:
++
+[source, console]
+----
+docker volume create -d netapp --name my_vol --opt size=20G
+----
++
+
+TIP: Le dimensioni dei volumi sono espresse come stringhe contenenti un valore intero con unità opzionali (ad esempio 10G, 20GB, 3TiB). Se non vengono specificate unità, il valore predefinito è G. le unità di misura possono essere espresse come potenze di 2 (B, KiB, MiB, GiB, TiB) o potenze di 10 (B, KB, MB, GB, TB). Le unità shortand utilizzano potenze di 2 (G = GiB, T = TIB, …).
+
+
+
+
+
+== Rimuovere un volume
+
+* Rimuovere il volume come qualsiasi altro volume Docker:
++
+[source, console]
+----
+docker volume rm firstVolume
+----
++
+
+IMPORTANT: Quando si utilizza il `solidfire-san` driver, l'esempio precedente elimina e rimuove il volume.
+
+
+
+Eseguire i passaggi riportati di seguito per eseguire l'upgrade di Trident per Docker.
+
+
+
+== Clonare un volume
+
+Quando si utilizza `ontap-nas` , , `ontap-san`, `solidfire-san` e `gcp-cvs storage drivers`, Trident può clonare i volumi. Quando si utilizzano i `ontap-nas-flexgroup` driver o `ontap-nas-economy`, la clonazione non è supportata. La creazione di un nuovo volume da un volume esistente determinerà la creazione di un nuovo snapshot.
+
+* Esaminare il volume per enumerare gli snapshot:
++
+[source, console]
+----
+docker volume inspect <volume_name>
+----
+* Creare un nuovo volume da un volume esistente. In questo modo verrà creata una nuova istantanea:
++
+[source, console]
+----
+docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume>
+----
+* Creare un nuovo volume da uno snapshot esistente su un volume. In questo modo non viene creata una nuova istantanea:
++
+[source, console]
+----
+docker volume create -d <driver_name> --name <new_name> -o from=<source_docker_volume> -o fromSnapshot=<source_snap_name>
+----
+
+
+
+
+=== Esempio
+
+[source, console]
+----
+docker volume inspect firstVolume
+
+[
+  {
+    "Driver": "ontap-nas",
+    "Labels": null,
+    "Mountpoint": "/var/lib/docker-volumes/ontap-nas/netappdvp_firstVolume",
+    "Name": "firstVolume",
+    "Options": {},
+    "Scope": "global",
+    "Status": {
+      "Snapshots": [
+        {
+          "Created": "2017-02-10T19:05:00Z",
+          "Name": "hourly.2017-02-10_1505"
+        }
+      ]
+    }
+  }
+]
+
+docker volume create -d ontap-nas --name clonedVolume -o from=firstVolume
+clonedVolume
+
+docker volume rm clonedVolume
+docker volume create -d ontap-nas --name volFromSnap -o from=firstVolume -o fromSnapshot=hourly.2017-02-10_1505
+volFromSnap
+
+docker volume rm volFromSnap
+----
+
+
+== Accesso ai volumi creati esternamente
+
+È possibile accedere ai dispositivi a blocchi creati esternamente (o ai loro cloni) utilizzando i contenitori Trident *solo* se non hanno partizioni e se il loro filesystem è supportato da Trident (ad esempio: Un file `ext4` formattato `/dev/sdc1` non sarà accessibile tramite Trident).

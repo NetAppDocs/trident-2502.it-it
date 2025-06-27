@@ -1,0 +1,62 @@
+---
+sidebar: sidebar 
+permalink: trident-get-started/quickstart.html 
+keywords: kubernetes cluster, simple installation, Kubernetes installation 
+summary: Se state iniziando a utilizzare Kubernetes, utilizzate le istruzioni per installare Kubernetes e provatelo. Queste istruzioni forniscono un cluster bare-bone a nodo singolo con cui Trident può integrarsi a scopo dimostrativo. 
+---
+= Avvio rapido di Trident
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+È possibile installare Trident e iniziare a gestire le risorse di storage in pochi passaggi. Prima di iniziare, consultare link:requirements.html["Requisiti Trident"].
+
+
+NOTE: Per Docker, fare riferimento alla sezione link:../trident-docker/deploy-docker.html["Trident per Docker"].
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["Uno"] Preparare il nodo di lavoro
+[role="quick-margin-para"]
+Tutti i nodi di lavoro nel cluster Kubernetes devono essere in grado di montare i volumi forniti per i pod.
+
+[role="quick-margin-para"]
+link:../trident-use/worker-node-prep.html["Preparare il nodo di lavoro"]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png["Due"] Installare Trident
+[role="quick-margin-para"]
+Trident offre diversi metodi e modalità di installazione ottimizzati per una varietà di ambienti e organizzazioni.
+
+[role="quick-margin-para"]
+link:../trident-get-started/kubernetes-deploy.html["Installare Trident"]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["Tre"] Creare un backend
+[role="quick-margin-para"]
+Un backend definisce la relazione tra Trident e un sistema di storage. Spiega a Trident come comunicare con quel sistema storage e come Trident dovrebbe eseguire il provisioning dei volumi da esso.
+
+[role="quick-margin-para"]
+link:../trident-use/backends.html["Configurare un backend"] per il tuo sistema storage
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["Quattro"] Creare una classe di storage Kubernetes
+[role="quick-margin-para"]
+L'oggetto Kubernetes StorageClass specifica Trident come provisioner e ti consente di creare una classe storage per eseguire il provisioning dei volumi con attributi personalizzabili. Trident crea una classe di storage corrispondente per gli oggetti Kubernetes che specificano il provisioner Trident.
+
+[role="quick-margin-para"]
+link:../trident-use/create-stor-class.html["Creare una classe di storage"]
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png["Cinque"] Provisioning di un volume
+[role="quick-margin-para"]
+Un _PersistentVolume_ (PV) è una risorsa di storage fisico con provisioning eseguito dall'amministratore del cluster in un cluster Kubernetes. _PersistentVolumeClaim_ (PVC) è una richiesta di accesso a PersistentVolume sul cluster.
+
+[role="quick-margin-para"]
+Creare un PersistentVolume (PV) e un PersistentVolumeClaim (PVC) che utilizza Kubernetes StorageClass configurato per richiedere l'accesso al PV. È quindi possibile montare il PV su un pod.
+
+[role="quick-margin-para"]
+link:../trident-use/vol-provision.html["Provisioning di un volume"]
+
+
+
+== Quali sono le prossime novità?
+
+Da oggi puoi aggiungere backend aggiuntivi, gestire classi di storage, gestire i backend ed eseguire operazioni in termini di volume.

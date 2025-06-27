@@ -1,0 +1,586 @@
+---
+sidebar: sidebar 
+permalink: trident-docker/stor-config.html 
+keywords: deploy, trident, docker, trident for docker, nfs, iscsi, protocol, nfs protocol, iscsi protocol, configure host, host config, storage config, options, variables, ontap, element, storage pool, cvs, cvs-performance, service type, service level, cloud volumes service, cloud volumes 
+summary: Consulta le opzioni di configurazione disponibili per le tue configurazioni Trident. 
+---
+= Opzioni di configurazione dello storage
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Consulta le opzioni di configurazione disponibili per le tue configurazioni Trident.
+
+
+
+== Opzioni di configurazione globale
+
+Queste opzioni di configurazione sono valide per tutte le configurazioni di Trident, a prescindere dalla piattaforma di storage utilizzata.
+
+[cols="3*"]
+|===
+| Opzione | Descrizione | Esempio 
+
+
+| `version`  a| 
+Numero di versione del file di configurazione
+ a| 
+`1`
+
+
+
+| `storageDriverName`  a| 
+Nome del driver di storage
+ a| 
+`ontap-nas`, , `ontap-san`, , `ontap-nas-economy`,
+`ontap-nas-flexgroup` `solidfire-san`
+
+
+
+| `storagePrefix`  a| 
+Prefisso opzionale per i nomi dei volumi. Predefinito: `netappdvp_`.
+ a| 
+`staging_`
+
+
+
+| `limitVolumeSize`  a| 
+Restrizione opzionale sulle dimensioni dei volumi. Predefinito: "" (non applicato)
+ a| 
+`10g`
+
+|===
+
+TIP: Non utilizzare `storagePrefix` (incluso il valore predefinito) per i backend dell'elemento. Per impostazione predefinita, il `solidfire-san` driver ignora questa impostazione e non utilizza un prefisso. NetApp consiglia di utilizzare un ID tenant specifico per la mappatura dei volumi di Docker o i dati degli attributi popolati con la versione di Docker, le informazioni dei driver e il nome raw di Docker nei casi in cui sia stata utilizzata la mappatura dei nomi.
+
+Sono disponibili opzioni predefinite per evitare di doverle specificare su ogni volume creato. L' `size`opzione è disponibile per tutti i tipi di controller. Consultare la sezione relativa alla configurazione di ONTAP per un esempio su come impostare le dimensioni predefinite del volume.
+
+[cols="3*"]
+|===
+| Opzione | Descrizione | Esempio 
+
+
+| `size`  a| 
+Dimensione predefinita opzionale per i nuovi volumi. Predefinito: `1G`
+ a| 
+`10G`
+
+|===
+
+
+== Configurazione ONTAP
+
+Oltre ai valori di configurazione globali sopra indicati, quando si utilizza ONTAP, sono disponibili le seguenti opzioni di primo livello.
+
+[cols="3*"]
+|===
+| Opzione | Descrizione | Esempio 
+
+
+| `managementLIF`  a| 
+Indirizzo IP della LIF di gestione ONTAP. È possibile specificare un nome di dominio completo (FQDN).
+ a| 
+`10.0.0.1`
+
+
+
+| `dataLIF`  a| 
+Indirizzo IP del protocollo LIF.
+
+*Driver NAS ONTAP*: NetApp consiglia di specificare `dataLIF`. Se non viene fornita, Trident recupera le LIF dati dalla SVM. È possibile specificare un nome di dominio completo (FQDN) da utilizzare per le operazioni di montaggio NFS, consentendo di creare un DNS round-robin per bilanciare il carico su più LIF dati.
+
+*Driver SAN ONTAP*: Non specificare per iSCSI o FC. Trident utilizza link:https://docs.netapp.com/us-en/ontap/san-admin/selective-lun-map-concept.html["Mappa LUN selettiva ONTAP"^] per rilevare le LIF iSCSI o FC necessarie per stabilire una sessione multi-path. Viene generato un avviso se `dataLIF` è definito esplicitamente.
+ a| 
+`10.0.0.2`
+
+
+
+| `svm`  a| 
+Macchina virtuale per lo storage da utilizzare (obbligatorio, se la LIF di gestione è una LIF del cluster)
+ a| 
+`svm_nfs`
+
+
+
+| `username`  a| 
+Nome utente per la connessione al dispositivo di storage
+ a| 
+`vsadmin`
+
+
+
+| `password`  a| 
+Password per la connessione al dispositivo di storage
+ a| 
+`secret`
+
+
+
+| `aggregate`  a| 
+Aggregato per il provisioning (facoltativo; se impostato, deve essere assegnato alla SVM). Per il `ontap-nas-flexgroup` driver, questa opzione viene ignorata. Tutti gli aggregati assegnati alla SVM vengono utilizzati per il provisioning di un volume FlexGroup.
+ a| 
+`aggr1`
+
+
+
+| `limitAggregateUsage`  a| 
+Facoltativo, non eseguire il provisioning se l'utilizzo è superiore a questa percentuale
+ a| 
+`75%`
+
+
+
+| `nfsMountOptions`  a| 
+Controllo granulare delle opzioni di montaggio NFS; il valore predefinito è "-o nfsfvers=3". *Disponibile solo per `ontap-nas` i driver e `ontap-nas-economy`*. https://www.netapp.com/pdf.html?item=/media/10720-tr-4067.pdf["Fare clic qui per informazioni sulla configurazione degli host NFS"^].
+ a| 
+`-o nfsvers=4`
+
+
+
+| `igroupName`  a| 
+Trident crea e gestisce per nodo `igroups` come `netappdvp`.
+
+Questo valore non può essere modificato o omesso.
+
+*Disponibile solo per il `ontap-san` conducente*.
+ a| 
+`netappdvp`
+
+
+
+| `limitVolumeSize`  a| 
+Dimensioni massime del volume richiudibile.
+ a| 
+`300g`
+
+
+
+| `qtreesPerFlexvol`  a| 
+Il numero massimo di qtree per FlexVol deve essere compreso nell'intervallo [50, 300], il valore predefinito è 200.
+
+*Per il `ontap-nas-economy` driver, questa opzione consente di personalizzare il numero massimo di qtree per FlexVol*.
+ a| 
+`300`
+
+
+
+ a| 
+`sanType`
+| *Supportato solo per `ontap-san` il driver.* Utilizzare per selezionare `iscsi` iSCSI, `nvme` NVMe/TCP o `fcp` SCSI over Fibre Channel (FC). | `iscsi` se vuoto 
+
+
+| `limitVolumePoolSize` | *Supportato `ontap-san-economy` `ontap-san-economy` solo per i driver e.* Limita le dimensioni degli FlexVol in driver ONTAP ONTAP-nas-Economy e ONTAP-SAN-Economy.  a| 
+`300g`
+
+|===
+Sono disponibili opzioni predefinite per evitare di doverle specificare su ogni volume creato:
+
+[cols="1,3,2"]
+|===
+| Opzione | Descrizione | Esempio 
+
+
+| `spaceReserve`  a| 
+Modalità di prenotazione dello spazio; `none` (thin provisioning) o `volume` (thick)
+ a| 
+`none`
+
+
+
+| `snapshotPolicy`  a| 
+Criterio snapshot da utilizzare, il valore predefinito è `none`
+ a| 
+`none`
+
+
+
+| `snapshotReserve`  a| 
+Percentuale di riserva istantanea, il valore predefinito è "" per accettare il valore predefinito di ONTAP
+ a| 
+`10`
+
+
+
+| `splitOnClone`  a| 
+Dividere un clone dal relativo padre al momento della creazione; l'impostazione predefinita è `false`
+ a| 
+`false`
+
+
+
+| `encryption`  a| 
+Abilita la crittografia dei volumi NetApp (NVE) sul nuovo volume; il valore predefinito è `false`. NVE deve essere concesso in licenza e abilitato sul cluster per utilizzare questa opzione.
+
+Se NAE è abilitato sul backend, qualsiasi volume sottoposto a provisioning in Trident sarà abilitato NAE.
+
+Per ulteriori informazioni, fare riferimento a: link:../trident-reco/security-reco.html["Come funziona Trident con NVE e NAE"].
+ a| 
+vero
+
+
+
+| `unixPermissions`  a| 
+Opzione NAS per i volumi NFS con provisioning, valore predefinito: `777`
+ a| 
+`777`
+
+
+
+| `snapshotDir`  a| 
+Opzione NAS per l'accesso alla `.snapshot` directory.
+ a| 
+"True" per NFSv4 "false" per NFSv3
+
+
+
+| `exportPolicy`  a| 
+Opzione NAS da utilizzare per la policy di esportazione NFS, valore predefinito: `default`
+ a| 
+`default`
+
+
+
+| `securityStyle`  a| 
+Opzione NAS per l'accesso al volume NFS fornito.
+
+Supporti NFS `mixed` e `unix` stili di sicurezza. L'impostazione predefinita è `unix`.
+ a| 
+`unix`
+
+
+
+| `fileSystemType`  a| 
+Opzione SAN per selezionare il tipo di file system, il valore predefinito è `ext4`
+ a| 
+`xfs`
+
+
+
+| `tieringPolicy`  a| 
+Criterio di tiering da utilizzare, il valore predefinito è `none`.
+ a| 
+`none`
+
+|===
+
+
+=== Opzioni di scalabilità
+
+ `ontap-nas`E `ontap-san` crea una ONTAP FlexVol per ogni volume di Docker. ONTAP supporta fino a 1000 FlexVol per nodo del cluster con un massimo di 12.000 FlexVol Volumes. Se i requisiti del tuo volume Docker soddisfano tali requisiti, il driver è la soluzione NAS preferita, `ontap-nas` a causa delle funzionalità aggiuntive offerte da FlexVol, come snapshot Docker-volume-granulari e cloning.
+
+Per ottenere un numero maggiore di volumi Docker rispetto a quelli gestibili dai limiti FlexVol, scegli il `ontap-nas-economy` o il `ontap-san-economy` driver.
+
+ `ontap-nas-economy`Il driver crea volumi Docker come qtree ONTAP all'interno di un pool di volumi FlexVol gestiti automaticamente. I qtree offrono una scalabilità di gran lunga superiore, fino a 100,000 per nodo cluster e 2,400,000 per cluster, a scapito di alcune funzionalità. Il `ontap-nas-economy` driver non supporta le snapshot o il cloning granulari del volume di Docker.
+
+
+NOTE: Al momento il `ontap-nas-economy` driver non è supportato da Docker Swarm, poiché Docker Swarm non orchestra la creazione di volumi su nodi multipli.
+
+ `ontap-san-economy`Il driver crea volumi Docker come LUN ONTAP all'interno di un pool condiviso di volumi FlexVol gestiti automaticamente. In questo modo, ogni FlexVol non è limitato a un solo LUN e offre una migliore scalabilità per i carichi di lavoro SAN. A seconda dello storage array, ONTAP supporta fino a 16384 LUN per cluster. Poiché i volumi sono LUN sottostanti, questo driver supporta snapshot e cloning Docker-volume-granulare.
+
+Scegliere il `ontap-nas-flexgroup` driver per aumentare il parallelismo a un singolo volume che può raggiungere l'intervallo di petabyte con miliardi di file. Alcuni casi di utilizzo ideali per FlexGroups includono ai/ML/DL, big data e analytics, build software, streaming, repository di file e così via. Trident utilizza tutti gli aggregati assegnati a una SVM durante il provisioning di un volume FlexGroup. Il supporto di FlexGroup in Trident ha anche le seguenti considerazioni:
+
+* Richiede ONTAP versione 9.2 o successiva.
+* Al momento della stesura del presente documento, FlexGroups supporta solo NFS v3.
+* Si consiglia di attivare gli identificatori NFSv3 a 64 bit per SVM.
+* Le dimensioni minime consigliate per il membro/volume FlexGroup sono 100GiB.
+* Il cloning non è supportato per i volumi FlexGroup.
+
+
+Per informazioni sui gruppi flessibili e sui carichi di lavoro appropriati per i gruppi flessibili, fare riferimento alla https://www.netapp.com/pdf.html?item=/media/12385-tr4571pdf.pdf["Guida alle Best practice e all'implementazione del volume NetApp FlexGroup"^] .
+
+Per ottenere funzionalità avanzate e su larga scala nello stesso ambiente, è possibile eseguire più istanze di Docker Volume Plugin, con una che utilizza e un'altra `ontap-nas-economy` che utilizza `ontap-nas` .
+
+
+
+=== Ruolo ONTAP personalizzato per Trident
+
+Puoi creare un ruolo cluster ONTAP con Minimum Privileges in modo da non dover utilizzare il ruolo di amministratore ONTAP per eseguire le operazioni in Trident. Quando si include il nome utente in una configurazione backend Trident, Trident utilizza il ruolo del cluster ONTAP creato per eseguire le operazioni.
+
+Per ulteriori informazioni sulla creazione di ruoli personalizzati di Trident, fare riferimento a.link:https://github.com/NetApp/trident/tree/master/contrib/ontap/trident_role["Generatore di ruoli personalizzati Trident"]
+
+[role="tabbed-block"]
+====
+.Utilizzo della CLI di ONTAP
+--
+. Creare un nuovo ruolo utilizzando il seguente comando:
++
+`security login role create <role_name\> -cmddirname "command" -access all -vserver <svm_name\>`
+
+. Creare un nome utente per l'utente Trident:
++
+`security login create -username <user_name\> -application ontapi -authmethod password -role <name_of_role_in_step_1\> -vserver <svm_name\> -comment "user_description"`
+`security login create -username <user_name\> -application http -authmethod password -role <name_of_role_in_step_1\> -vserver <svm_name\> -comment "user_description"`
+
+. Associare il ruolo all'utente:
++
+`security login modify username <user_name\> -vserver <svm_name\> -role <role_name\> -application ontapi -application console -authmethod <password\>`
+
+
+
+--
+.Utilizzo di System Manager
+--
+In Gestione sistema di ONTAP, eseguire le seguenti operazioni:
+
+. *Crea un ruolo personalizzato*:
++
+.. Per creare un ruolo personalizzato a livello di cluster, selezionare *Cluster > Impostazioni*.
++
+(Oppure) per creare un ruolo personalizzato a livello di SVM, selezionare *Storage > Storage VM `required SVM` > > Impostazioni > utenti e ruoli*.
+
+.. Selezionare l'icona a freccia (*->*) accanto a *utenti e ruoli*.
+.. Selezionare *+Aggiungi* in *ruoli*.
+.. Definire le regole per il ruolo e fare clic su *Salva*.
+
+
+. *Associare il ruolo all'utente Trident*: + eseguire i seguenti passaggi nella pagina *utenti e ruoli*:
++
+.. Selezionare icona Aggiungi *+* in *utenti*.
+.. Selezionare il nome utente richiesto e scegliere un ruolo nel menu a discesa *ruolo*.
+.. Fare clic su *Save* (Salva).
+
+
+
+
+--
+====
+Per ulteriori informazioni, fare riferimento alle pagine seguenti:
+
+* link:https://kb.netapp.com/on-prem/ontap/Ontap_OS/OS-KBs/FAQ__Custom_roles_for_administration_of_ONTAP["Ruoli personalizzati per l'amministrazione di ONTAP"^] o. link:https://docs.netapp.com/us-en/ontap/authentication/define-custom-roles-task.html["Definire ruoli personalizzati"^]
+* link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_roles_users.html#rest-api["Lavorare con ruoli e utenti"^]
+
+
+
+
+=== File di configurazione ONTAP di esempio
+
+.Esempio di NFS per il driver </code> <code> ONTAP-Avantage
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-nas",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.2",
+  "svm": "svm_nfs",
+  "username": "vsadmin",
+  "password": "password",
+  "aggregate": "aggr1",
+  "defaults": {
+    "size": "10G",
+    "spaceReserve": "none",
+    "exportPolicy": "default"
+  }
+}
+----
+====
+.Esempio NFS per il driver <code> ONTAP-nas-FlexGroup </code>
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-nas-flexgroup",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.2",
+  "svm": "svm_nfs",
+  "username": "vsadmin",
+  "password": "password",
+  "defaults": {
+    "size": "100G",
+    "spaceReserve": "none",
+    "exportPolicy": "default"
+  }
+}
+----
+====
+.Esempio NFS per il driver </code> <code> ONTAP-nas-economy
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-nas-economy",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.2",
+  "svm": "svm_nfs",
+  "username": "vsadmin",
+  "password": "password",
+  "aggregate": "aggr1"
+}
+----
+====
+.Esempio di iSCSI per il driver </code> <code> ONTAP-Avantage
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.3",
+  "svm": "svm_iscsi",
+  "username": "vsadmin",
+  "password": "password",
+  "aggregate": "aggr1",
+  "igroupName": "netappdvp"
+}
+----
+====
+.Esempio NFS per il driver </code> <code> ONTAP-san-economy
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "ontap-san-economy",
+  "managementLIF": "10.0.0.1",
+  "dataLIF": "10.0.0.3",
+  "svm": "svm_iscsi_eco",
+  "username": "vsadmin",
+  "password": "password",
+  "aggregate": "aggr1",
+  "igroupName": "netappdvp"
+}
+----
+====
+.Esempio NVMe/TCP per driver </code> compatibile con <code> ONTAP
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "backendName": "NVMeBackend",
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "svm": "svm_nvme",
+  "username": "vsadmin",
+  "password": "password",
+  "sanType": "nvme",
+  "useREST": true
+}
+----
+====
+.Esempio di SCSI su FC per il driver </code> <code> ONTAP
+[%collapsible]
+====
+[source, json]
+----
+{
+  "version": 1,
+  "backendName": "ontap-san-backend",
+  "storageDriverName": "ontap-san",
+  "managementLIF": "10.0.0.1",
+  "sanType": "fcp",
+  "svm": "trident_svm",
+  "username": "vsadmin",
+  "password": "password",
+  "useREST": true
+}
+----
+====
+
+
+== Configurazione del software Element
+
+Oltre ai valori di configurazione globali, quando si utilizza il software Element (NetApp HCI/SolidFire), queste opzioni sono disponibili.
+
+[cols="3*"]
+|===
+| Opzione | Descrizione | Esempio 
+
+
+| `Endpoint`  a| 
+https://<login>:<password>@<mvip>/json-rpc/<element-version>
+ a| 
+\https://admin:admin@192.168.160.3/json-rpc/8.0
+
+
+
+| `SVIP`  a| 
+Porta e indirizzo IP iSCSI
+ a| 
+10.0.0.7:3260
+
+
+
+| `TenantName`  a| 
+Tenant SolidFireF da utilizzare (creato se non trovato)
+ a| 
+`docker`
+
+
+
+| `InitiatorIFace`  a| 
+Specificare l'interfaccia quando si limita il traffico iSCSI all'interfaccia non predefinita
+ a| 
+`default`
+
+
+
+| `Types`  a| 
+Specifiche QoS
+ a| 
+Vedere l'esempio riportato di seguito
+
+
+
+| `LegacyNamePrefix`  a| 
+Prefisso per installazioni Trident aggiornate. Se è stata utilizzata una versione di Trident precedente alla 1.3.2 ed è stato eseguito un aggiornamento con volumi esistenti, sarà necessario impostare questo valore per accedere ai vecchi volumi mappati tramite il metodo del nome del volume.
+ a| 
+`netappdvp-`
+
+|===
+Il `solidfire-san` driver non supporta Docker Swarm.
+
+
+
+=== Esempio di file di configurazione del software Element
+
+[source, json]
+----
+{
+  "version": 1,
+  "storageDriverName": "solidfire-san",
+  "Endpoint": "https://admin:admin@192.168.160.3/json-rpc/8.0",
+  "SVIP": "10.0.0.7:3260",
+  "TenantName": "docker",
+  "InitiatorIFace": "default",
+  "Types": [
+    {
+      "Type": "Bronze",
+      "Qos": {
+        "minIOPS": 1000,
+        "maxIOPS": 2000,
+        "burstIOPS": 4000
+      }
+    },
+    {
+      "Type": "Silver",
+      "Qos": {
+        "minIOPS": 4000,
+        "maxIOPS": 6000,
+        "burstIOPS": 8000
+      }
+    },
+    {
+      "Type": "Gold",
+      "Qos": {
+        "minIOPS": 6000,
+        "maxIOPS": 8000,
+        "burstIOPS": 10000
+      }
+    }
+  ]
+}
+----

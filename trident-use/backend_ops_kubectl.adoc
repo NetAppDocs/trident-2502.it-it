@@ -1,0 +1,79 @@
+---
+sidebar: sidebar 
+permalink: trident-use/backend_ops_kubectl.html 
+keywords: backends, storage system, anf, cvs for aws, cvs for gcp, element, hci, solidfire, ontap, aff, fas, ontap select, configure backends, kubectl, create backends, delete backends, update backends, view backends 
+summary: 'Informazioni su come eseguire operazioni di gestione backend utilizzando `kubectl`.' 
+---
+= Eseguire la gestione del back-end con kubectl
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Informazioni su come eseguire operazioni di gestione backend utilizzando `kubectl`.
+
+
+
+== Eliminare un backend
+
+Eliminando un `TridentBackendConfig`, si ordina a Trident di eliminare/conservare i backend (in base a `deletionPolicy`). Per eliminare un backend, assicurarsi che `deletionPolicy` sia impostato su Elimina. Per eliminare solo il `TridentBackendConfig`, assicurarsi che `deletionPolicy` sia impostato su Mantieni. In questo modo si garantisce che il backend sia ancora presente e che possa essere gestito utilizzando `tridentctl`.
+
+Eseguire il seguente comando:
+
+[listing]
+----
+kubectl delete tbc <tbc-name> -n trident
+----
+Trident non elimina i segreti di Kubernetes utilizzati da `TridentBackendConfig`. L'utente Kubernetes è responsabile della pulizia dei segreti. Prestare attenzione quando si eliminano i segreti. È necessario eliminare i segreti solo se non vengono utilizzati dai backend.
+
+
+
+== Visualizzare i backend esistenti
+
+Eseguire il seguente comando:
+
+[listing]
+----
+kubectl get tbc -n trident
+----
+È anche possibile eseguire `tridentctl get backend -n trident` o `tridentctl get backend -o yaml -n trident` ottenere un elenco di tutti i backend esistenti. Questo elenco include anche i backend creati con `tridentctl`.
+
+
+
+== Aggiornare un backend
+
+Possono esserci diversi motivi per aggiornare un backend:
+
+* Le credenziali del sistema storage sono state modificate. Per aggiornare le credenziali, è necessario aggiornare il segreto Kubernetes utilizzato nell' `TridentBackendConfig`oggetto. Trident aggiornerà automaticamente il backend con le credenziali più recenti fornite. Eseguire il seguente comando per aggiornare Kubernetes Secret:
++
+[listing]
+----
+kubectl apply -f <updated-secret-file.yaml> -n trident
+----
+* È necessario aggiornare i parametri (ad esempio il nome della SVM ONTAP utilizzata).
++
+** Puoi aggiornare `TridentBackendConfig` gli oggetti direttamente tramite Kubernetes usando il seguente comando:
++
+[listing]
+----
+kubectl apply -f <updated-backend-file.yaml>
+----
+** In alternativa, è possibile apportare modifiche alla CR esistente `TridentBackendConfig` utilizzando il seguente comando:
++
+[listing]
+----
+kubectl edit tbc <tbc-name> -n trident
+----
+
+
+
+
+[NOTE]
+====
+* Se un aggiornamento back-end non riesce, il back-end continua a rimanere nella sua ultima configurazione nota. È possibile visualizzare i registri per determinare la causa eseguendo `kubectl get tbc <tbc-name> -o yaml -n trident` o `kubectl describe tbc <tbc-name> -n trident`.
+* Dopo aver identificato e corretto il problema con il file di configurazione, è possibile eseguire nuovamente il comando update.
+
+
+====

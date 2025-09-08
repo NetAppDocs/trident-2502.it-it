@@ -201,16 +201,17 @@ Assicurati che la scadenza del token di sessione AWS sia sufficiente per eventua
 ** *Spec.snapshotRetention*: Il numero di snapshot da conservare. Zero indica che non è necessario creare snapshot.
 ** *spec.granularity*: frequenza di esecuzione della pianificazione. Valori possibili, insieme ai campi associati obbligatori:
 +
-*** `hourly` (è necessario specificare `spec.minute`)
-*** `daily` (richiede di specificare `spec.minute` e `spec.hour`)
-*** `weekly` (è necessario specificare `spec.minute, spec.hour`, e `spec.dayOfWeek`)
-*** `monthly` (è necessario specificare `spec.minute, spec.hour`, e `spec.dayOfMonth`)
+*** `Hourly`(richiede che tu specifichi `spec.minute` )
+*** `Daily`(richiede che tu specifichi `spec.minute` E `spec.hour` )
+*** `Weekly`(richiede che tu specifichi `spec.minute, spec.hour` , E `spec.dayOfWeek` )
+*** `Monthly`(richiede che tu specifichi `spec.minute, spec.hour` , E `spec.dayOfMonth` )
+*** `Custom`
 
 
-** *Spec.dayOfMonth*: (_Optional_) il giorno del mese (1 - 31) in cui dovrebbe essere eseguito il programma. Questo campo è obbligatorio se la granularità è impostata su `monthly`.
-** *Spec.DayOfWeek*: (_Optional_) il giorno della settimana (0 - 7) in cui dovrebbe essere eseguito il programma. I valori di 0 o 7 indicano la domenica. Questo campo è obbligatorio se la granularità è impostata su `weekly`.
-** *Spec.hour*: (_Optional_) l'ora del giorno (0 - 23) in cui dovrebbe essere eseguito il programma. Questo campo è obbligatorio se la granularità è impostata su `daily`, , `weekly`o `monthly`.
-** *Spec.minute*: (_Optional_) il minuto dell'ora (0 - 59) che dovrebbe essere eseguito. Questo campo è obbligatorio se la granularità è impostata su `hourly`, , `daily` `weekly`o `monthly`.
+** *spec.dayOfMonth*: (_Facoltativo_) Il giorno del mese (1 - 31) in cui la pianificazione deve essere eseguita. Questo campo è obbligatorio se la granularità è impostata su `Monthly` .
+** *spec.dayOfWeek*: (_Facoltativo_) Il giorno della settimana (0 - 7) in cui deve essere eseguita la pianificazione. I valori 0 o 7 indicano domenica. Questo campo è obbligatorio se la granularità è impostata su `Weekly` .
+** *spec.hour*: (_Facoltativo_) L'ora del giorno (0 - 23) in cui la pianificazione deve essere eseguita. Questo campo è obbligatorio se la granularità è impostata su `Daily` , `Weekly` , O `Monthly` .
+** *spec.minute*: (_Facoltativo_) Il minuto dell'ora (0 - 59) in cui la pianificazione deve essere eseguita. Questo campo è obbligatorio se la granularità è impostata su `Hourly` , `Daily` , `Weekly` , O `Monthly` .
 +
 [source, yaml]
 ----
@@ -226,7 +227,7 @@ spec:
   appVaultRef: appvault-name
   backupRetention: "15"
   snapshotRetention: "15"
-  granularity: <monthly>
+  granularity: Monthly
   dayOfMonth: "1"
   dayOfWeek: "0"
   hour: "0"

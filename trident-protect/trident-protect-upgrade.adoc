@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: trident-protect/trident-protect-upgrade.html 
 keywords: trident, protect, netapp, upgrade, new, version 
-summary: È possibile aggiornare Trident Protect alla versione più recente per sfruttare le nuove funzionalità o le correzioni dei bug. 
+summary: 'Puoi aggiornare Trident Protect all"ultima versione per sfruttare le nuove funzionalità o le correzioni di bug.' 
 ---
-= Aggiornare Trident Protect
+= Aggiorna Trident Protect
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: È possibile aggiornare Trident Protect alla versione più recente per 
 
 
 [role="lead"]
-È possibile aggiornare Trident Protect alla versione più recente per sfruttare le nuove funzionalità o le correzioni dei bug.
+Puoi aggiornare Trident Protect all'ultima versione per sfruttare le nuove funzionalità o le correzioni di bug.
 
 Per aggiornare Trident Protect, procedere come segue.
 
@@ -25,13 +25,13 @@ Per aggiornare Trident Protect, procedere come segue.
 ----
 helm repo update
 ----
-. Aggiornare i CRD Trident Protect:
+. Aggiorna i CRD Trident Protect:
 +
 [source, console]
 ----
 helm upgrade trident-protect-crds netapp-trident-protect/trident-protect-crds --version 100.2502.0  --namespace trident-protect
 ----
-. Aggiornamento di Trident Protect:
+. Aggiorna Trident Protect:
 +
 [source, console]
 ----

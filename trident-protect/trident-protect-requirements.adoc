@@ -31,9 +31,13 @@ Trident Protect è compatibile con un'ampia gamma di offerte Kubernetes completa
 * Kubernetes upstream
 
 
+[NOTE]
+====
+* Assicurarsi che il cluster su cui si installa Trident Protect sia configurato con un controller snapshot in esecuzione e i relativi CRD. Per installare un controller snapshot, fare riferimento a https://docs.netapp.com/us-en/trident/trident-use/vol-snapshots.html#deploy-a-volume-snapshot-controller["queste istruzioni"] .
+* Per installare Trident Protect è necessario Helm 4.x o versioni successive.
 
-NOTE: Assicurarsi che il cluster su cui si installa Trident Protect sia configurato con un controller snapshot in esecuzione e i relativi CRD. Per installare un controller snapshot, fare riferimento a https://docs.netapp.com/us-en/trident/trident-use/vol-snapshots.html#deploy-a-volume-snapshot-controller["queste istruzioni"] .
 
+====
 
 
 == Compatibilità del backend di archiviazione Trident Protect

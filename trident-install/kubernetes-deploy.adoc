@@ -1,6 +1,6 @@
 ---
 sidebar: sidebar 
-permalink: trident-get-started/kubernetes-deploy.html 
+permalink: trident-install/kubernetes-deploy.html 
 keywords: deploy, Trident, methods, operator, tridentctl, helm, tanzu, vmware 
 summary: 'È possibile installare Trident utilizzando l"operatore Trident (manualmente o utilizzando Helm) o con `tridentctl`. In questo argomento vengono fornite informazioni importanti per la scelta del processo di installazione appropriato.' 
 ---
@@ -40,7 +40,7 @@ L'utilizzo di una configurazione non multipathing o di `find_multipaths: yes` un
 
 Indipendentemente dal percorso di installazione, è necessario disporre di:
 
-* Privilegi completi per un cluster Kubernetes supportato che esegue una versione supportata di Kubernetes e requisiti di funzionalità attivati. Per ulteriori informazioni, consultare la link:requirements.html["requisiti"]sezione.
+* Privilegi completi per un cluster Kubernetes supportato che esegue una versione supportata di Kubernetes e con i requisiti delle funzionalità abilitati. Consultare link:../trident-get-started/requirements.html["requisiti"] per i dettagli.
 * Accesso a un sistema storage NetApp supportato.
 * Possibilità di montare volumi da tutti i nodi di lavoro Kubernetes.
 * Un host Linux con `kubectl` (o `oc`, se si utilizza OpenShift) installato e configurato per gestire il cluster Kubernetes che si desidera utilizzare.
@@ -55,7 +55,7 @@ TIP: Se non avete familiarizzato con il link:../trident-get-started/intro.html["
 
 == Scegliere il metodo di installazione desiderato
 
-Seleziona il metodo di installazione più adatto alle tue esigenze. Prima di prendere la decisione, è necessario rivedere le considerazioni relative a link:kubernetes-deploy.html#move-between-installation-methods["passaggio da un metodo all'altro"].
+Seleziona il metodo di installazione più adatto alle tue esigenze. Dovresti anche esaminare le considerazioni per link:kubernetes-deploy.html#moving-between-installation-methods["passaggio da un metodo all'altro"] prima di prendere una decisione.
 
 
 

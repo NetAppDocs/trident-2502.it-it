@@ -20,12 +20,14 @@ Quando si eseguono operazioni di protezione dei dati su un'applicazione, è nece
 
 
 
+[[configure-appvault-authentication-and-passwords]]
 == Configurare l'autenticazione e le password AppVault
 
 Prima di creare una CR AppVault, è necessario assicurarsi che AppVault e il data mover scelto possano autenticarsi con il provider e con qualsiasi risorsa correlata.
 
 
 
+[[data-mover-repository-passwords]]
 === Password del repository di spostamento dati
 
 Quando si creano oggetti AppVault utilizzando CR o il plug-in Trident Protect CLI, è possibile indicare a Trident Protect di utilizzare un segreto Kubernetes contenente password personalizzate per la crittografia dei repository Restic e Kopia. Se non specifichi un segreto, Trident Protect utilizza una password predefinita.
@@ -74,6 +76,7 @@ kubectl create secret generic my-optional-data-mover-secret \
 ====
 
 
+[[s3-compatible-storage-iam-permissions]]
 === Autorizzazioni IAM per l'archiviazione compatibile con S3
 
 Quando si accede a un archivio compatibile con S3 come Amazon S3, Generic S3, https://docs.netapp.com/us-en/storagegrid/s3/index.html["StorageGRID S3"^] , O https://docs.netapp.com/us-en/ontap/s3-config/["ONTAP S3"^] utilizzando Trident Protect, è necessario assicurarsi che le credenziali utente fornite dispongano delle autorizzazioni necessarie per accedere al bucket. Di seguito è riportato un esempio di policy che concede le autorizzazioni minime richieste per l'accesso con Trident Protect. È possibile applicare questo criterio all'utente che gestisce i criteri dei bucket compatibili con S3.
@@ -100,6 +103,7 @@ Per ulteriori informazioni sulle policy di Amazon S3, fare riferimento agli esem
 
 
 
+[[appvault-key-generation-examples-for-cloud-providers]]
 === Esempi di generazione delle chiavi AppVault per i cloud provider
 
 Quando si definisce un CR AppVault, è necessario includere le credenziali per accedere alle risorse ospitate dal provider. La modalità di generazione delle chiavi per le credenziali varia a seconda del provider. Di seguito sono riportati esempi di generazione di chiavi della riga di comando per diversi provider. Puoi utilizzare i seguenti esempi per creare chiavi per le credenziali di ciascun cloud provider.
@@ -167,12 +171,14 @@ kubectl create secret generic <secret-name> \
 ====
 
 
+[[appvault-creation-examples]]
 == Esempi di creazione di AppVault
 
 Di seguito sono riportate alcune definizioni AppVault di esempio per ogni provider.
 
 
 
+[[appvault-cr-examples]]
 === Esempi di AppVault CR
 
 È possibile utilizzare i seguenti esempi CR per creare oggetti AppVault per ciascun provider cloud.
@@ -353,6 +359,7 @@ spec:
 ====
 
 
+[[appvault-creation-examples-using-the-trident-protect-cli]]
 === Esempi di creazione di AppVault utilizzando la CLI Trident Protect
 
 È possibile utilizzare i seguenti esempi di comandi CLI per creare CRS AppVault per ciascun provider.
@@ -442,6 +449,7 @@ tridentctl-protect create vault StorageGridS3 <vault-name> \
 ====
 
 
+[[view-appvault-information]]
 == Visualizzare le informazioni AppVault
 
 È possibile utilizzare il plug-in Trident Protect CLI per visualizzare informazioni sugli oggetti AppVault creati nel cluster.
@@ -483,6 +491,7 @@ Il nome del cluster nella prima colonna della tabella è disponibile solo se è 
 
 
 
+[[remove-an-appvault]]
 == Rimuovere un AppVault
 
 È possibile rimuovere un oggetto AppVault in qualsiasi momento.

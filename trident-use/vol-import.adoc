@@ -16,6 +16,7 @@ summary: 'È possibile importare volumi di archiviazione esistenti come PV Kuber
 
 
 
+[[overview-and-considerations]]
 == Panoramica e considerazioni
 
 È possibile importare un volume in Trident in:
@@ -52,6 +53,7 @@ TIP: Questa opzione è utile se si desidera utilizzare Kubernetes per carichi di
 
 
 
+[[import-a-volume]]
 == Importare un volume
 
 È possibile importare un volume utilizzando  `tridentctl import` oppure creando un PVC con annotazioni di importazione Trident.
@@ -147,12 +149,14 @@ Trident importerà automaticamente il volume e lo assocerà al PVC.
 ====
 
 
+[[examples]]
 == Esempi
 
 Consultare i seguenti esempi di importazione di volumi per i driver supportati.
 
 
 
+[[ontap-nas-and-ontap-nas-flexgroup]]
 === NAS ONTAP e NAS FlexGroup ONTAP
 
 Trident supporta l'importazione dei volumi utilizzando `ontap-nas` driver e `ontap-nas-flexgroup` .
@@ -260,6 +264,7 @@ spec:
 ====
 
 
+[[ontap-san]]
 === ONTAP SAN
 
 Trident supporta l'importazione dei volumi utilizzando `ontap-san` driver e `ontap-san-economy` .
@@ -311,6 +316,7 @@ image:./san-import-igroup.png["Immagine delle LUN mappate a iqn e iqn del cluste
 ====
 
 
+[[element]]
 === Elemento
 
 Trident supporta il software NetApp Element e l'importazione di volumi NetApp HCI utilizzando il `solidfire-san` driver.
@@ -332,6 +338,7 @@ tridentctl import volume element_default element-managed -f pvc-basic-import.yam
 ----
 
 
+[[google-cloud-platform]]
 === Piattaforma Google Cloud
 
 Trident supporta l'importazione di volumi utilizzando il `gcp-cvs` driver.
@@ -354,6 +361,7 @@ tridentctl import volume gcpcvs_YEppr adroit-jolly-swift -f <path-to-pvc-file> -
 ----
 
 
+[[azure-netapp-files]]
 === Azure NetApp Files
 
 Trident supporta l'importazione di volumi utilizzando il `azure-netapp-files` driver.
@@ -375,6 +383,7 @@ tridentctl import volume azurenetappfiles_40517 importvol1 -f <path-to-pvc-file>
 ----
 
 
+[[google-cloud-netapp-volumes]]
 === Google Cloud NetApp Volumes
 
 Trident supporta l'importazione di volumi utilizzando il `google-cloud-netapp-volumes` driver.

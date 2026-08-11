@@ -16,6 +16,7 @@ summary: 'È possibile distribuire l"operatore Trident e installare Trident util
 
 
 
+[[critical-information-about-trident-25-02]]
 == Informazioni critiche su Trident 25,02
 
 *È necessario leggere le seguenti informazioni critiche su Trident.*
@@ -36,14 +37,15 @@ L'utilizzo di una configurazione non multipathing o di `find_multipaths: yes` un
 ====
 
 
+[[deploy-the-trident-operator-and-install-trident-using-helm]]
 == Distribuire l'operatore Trident e installare Trident utilizzando Helm
 
 Utilizzando Trident link:https://artifacthub.io/packages/helm/netapp-trident/trident-operator["Grafico di comando"^]è possibile distribuire l'operatore Trident e installare Trident in un'unica fase.
 
-Verificate link:trident-install/kubernetes-deploy.html["panoramica dell'installazione"] per assicurarvi di aver soddisfatto i prerequisiti di installazione e di aver selezionato l'opzione di installazione corretta per il vostro ambiente.
+Verificate link:kubernetes-deploy.html["panoramica dell'installazione"] per assicurarvi di aver soddisfatto i prerequisiti di installazione e di aver selezionato l'opzione di installazione corretta per il vostro ambiente.
 
 .Prima di iniziare
-Oltre al link:trident-install/kubernetes-deploy.html#before-you-deploy["prerequisiti per l'implementazione"] è necessario link:https://v3.helm.sh/["Helm versione 3"^].
+Oltre al link:trident-install/kubernetes-deploy.html#before-you-begin["prerequisiti per l'implementazione"] è necessario link:https://v3.helm.sh/["Helm versione 3"^].
 
 
 IMPORTANT: Quando si installa Trident in un repository privato, se si utilizza `imageRegistry` lo switch per specificare la posizione del repository, non utilizzare `/netapp/` nel percorso del repository.
@@ -84,6 +86,7 @@ NOTE: Se è già stato creato uno spazio dei nomi per Trident, il `--create-name
 
 
 
+[[pass-configuration-data-during-install]]
 == Passare i dati di configurazione durante l'installazione
 
 Esistono due modi per passare i dati di configurazione durante l'installazione:
@@ -116,6 +119,7 @@ helm install <name> netapp-trident/trident-operator --version 100.2502.0  --crea
 ----
 
 
+[[configuration-options]]
 == Opzioni di configurazione
 
 Questa tabella e il `values.yaml` file, che fa parte del grafico Helm, forniscono l'elenco delle chiavi e i loro valori predefiniti.

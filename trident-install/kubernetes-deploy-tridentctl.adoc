@@ -16,6 +16,7 @@ summary: 'È possibile installare Trident utilizzando `tridentctl`. Questo proce
 
 
 
+[[critical-information-about-trident-25-02]]
 == Informazioni critiche su Trident 25,02
 
 *È necessario leggere le seguenti informazioni critiche su Trident.*
@@ -33,6 +34,7 @@ L'utilizzo di una configurazione non multipathing o di `find_multipaths: yes` un
 ====
 
 
+[[install-trident-using-tridentctl]]
 == Installare Trident utilizzando `tridentctl`
 
 Verificate link:../trident-install/kubernetes-deploy.html["panoramica dell'installazione"] per assicurarvi di aver soddisfatto i prerequisiti di installazione e di aver selezionato l'opzione di installazione corretta per il vostro ambiente.
@@ -69,6 +71,7 @@ kubectl run -i --tty ping --image=busybox --restart=Never --rm -- \
 ====
 
 
+[[step-1-download-the-trident-installer-package]]
 == Fase 1: Scaricare il pacchetto di installazione di Trident
 
 Il pacchetto di installazione di Trident crea un pod Trident, configura gli oggetti CRD utilizzati per mantenere il proprio stato e inizializza i sidecar CSI per eseguire azioni come il provisioning e il collegamento dei volumi agli host del cluster. Scaricare ed estrarre la versione più recente del programma di installazione di Trident da link:https://github.com/NetApp/trident/releases/latest["La sezione _Assets_ su GitHub"^]. Aggiornare _<Trident-installer-XX.XX.X.tar.gz>_ nell'esempio con la versione Trident selezionata.
@@ -81,6 +84,7 @@ cd trident-installer
 ----
 
 
+[[step-2-install-trident]]
 == Fase 2: Installare Trident
 
 Installare Trident nello spazio dei nomi desiderato eseguendo il `tridentctl install` comando. È possibile aggiungere ulteriori argomenti per specificare la posizione del Registro di sistema dell'immagine.
@@ -132,12 +136,14 @@ INFO Trident installation succeeded.
 ----
 
 
+[[verify-the-installation]]
 == Verificare l'installazione
 
 È possibile verificare l'installazione utilizzando lo stato di creazione del pod o `tridentctl`.
 
 
 
+[[using-pod-creation-status]]
 === Utilizzo dello stato di creazione del pod
 
 È possibile verificare se l'installazione di Trident è stata completata controllando lo stato dei pod creati:
@@ -155,6 +161,7 @@ NOTE: Se il programma di installazione non viene completato correttamente o `tri
 
 
 
+[[using-tridentctl]]
 === Uso `tridentctl`
 
 È possibile utilizzare `tridentctl` per controllare la versione di Trident installata.
@@ -171,6 +178,7 @@ NOTE: Se il programma di installazione non viene completato correttamente o `tri
 ----
 
 
+[[sample-configurations]]
 == Configurazioni di esempio
 
 Gli esempi seguenti forniscono configurazioni di esempio per l'installazione di Trident utilizzando `tridentctl`.

@@ -16,6 +16,7 @@ Informazioni su come creare e utilizzare i driver SAN ONTAP con l'installazione 
 
 
 
+[[backend-configuration-options]]
 == Opzioni di configurazione back-end
 
 Per le opzioni di configurazione del backend, consultare la tabella seguente:
@@ -144,6 +145,7 @@ Consente `formatOptions` di specificare gli argomenti della riga di comando per 
 |===
 
 
+[[recommendations-for-using-formatoptions]]
 === Consigli per l'uso di formatOptions
 
 Per accelerare il processo di formattazione, Trident consiglia di utilizzare la seguente opzione:
@@ -155,6 +157,7 @@ Per accelerare il processo di formattazione, Trident consiglia di utilizzare la 
 
 
 
+[[backend-configuration-options-for-provisioning-volumes]]
 == Opzioni di configurazione back-end per il provisioning dei volumi
 
 È possibile controllare il provisioning predefinito utilizzando queste opzioni nella `defaults` sezione della configurazione. Per un esempio, vedere gli esempi di configurazione riportati di seguito.
@@ -198,6 +201,7 @@ Per accelerare il processo di formattazione, Trident consiglia di utilizzare la 
 |===
 
 
+[[volume-provisioning-examples]]
 === Esempi di provisioning di volumi
 
 Ecco un esempio con i valori predefiniti definiti:
@@ -243,6 +247,7 @@ Attualmente, il ridimensionamento è l'unico modo per utilizzare il nuovo calcol
 
 
 
+[[minimal-configuration-examples]]
 == Esempi di configurazione minimi
 
 Gli esempi seguenti mostrano le configurazioni di base che lasciano la maggior parte dei parametri predefiniti. Questo è il modo più semplice per definire un backend.
@@ -443,6 +448,7 @@ defaults:
 ====
 
 
+[[examples-of-backends-with-virtual-pools]]
 == Esempi di backend con pool virtuali
 
 In questi file di definizione di backend di esempio, vengono impostati valori predefiniti specifici per tutti i pool di storage, ad esempio `spaceReserve` Nessuno, `spaceAllocation` falso e `encryption` falso. I pool virtuali sono definiti nella sezione storage.
@@ -587,6 +593,7 @@ storage:
 ====
 
 
+[[map-backends-to-storageclasses]]
 == Mappare i backend in StorageClasses
 
 Le seguenti definizioni di StorageClass si riferiscono a <<Esempi di backend con pool virtuali>>. A tale `parameters.selector` scopo, ogni StorageClass definisce i pool virtuali che è possibile utilizzare per ospitare un volume. Gli aspetti del volume saranno definiti nel pool virtuale scelto.

@@ -24,6 +24,7 @@ Se si desidera utilizzare la funzionalità snapshot, installare il componente ag
 
 
 
+[[install-trident-via-helm]]
 == Installare Trident tramite helm
 
 . Scaricare il pacchetto di installazione di Trident
@@ -69,12 +70,14 @@ trident-operator    trident     1           2024-10-14 14:31:22.463122 +0300 IDT
 
 
 
+[[install-trident-via-the-eks-add-on]]
 == Installare Trident tramite il componente aggiuntivo EKS
 
 Il componente aggiuntivo Trident EKS include le più recenti patch di sicurezza, correzioni di bug ed è convalidato da AWS per funzionare con Amazon EKS. Il componente aggiuntivo EKS ti consente di garantire in modo coerente che i tuoi cluster Amazon EKS siano sicuri e stabili e di ridurre la quantità di lavoro da svolgere per installare, configurare e aggiornare i componenti aggiuntivi.
 
 
 
+[[prerequisites]]
 === Prerequisiti
 
 Prima di configurare il componente aggiuntivo Trident per AWS EKS, assicurati di disporre di quanto segue:
@@ -91,6 +94,7 @@ Prima di configurare il componente aggiuntivo Trident per AWS EKS, assicurati di
 
 
 
+[[enable-the-trident-add-on-for-aws]]
 === Attiva il componente aggiuntivo Trident per AWS
 
 [role="tabbed-block"]
@@ -177,6 +181,7 @@ aws eks create-addon --cli-input-json file://add-on.json
 ====
 
 
+[[update-the-trident-eks-add-on]]
 === Aggiornare il componente aggiuntivo Trident EKS
 
 [role="tabbed-block"]
@@ -240,6 +245,7 @@ aws eks update-addon --cluster-name my-cluster netapp_trident-operator vpc-cni -
 ====
 
 
+[[uninstallremove-the-trident-eks-add-on]]
 === Disinstallare/rimuovere il componente aggiuntivo Trident EKS
 
 Hai due opzioni per rimuovere un add-on Amazon EKS:

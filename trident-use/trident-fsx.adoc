@@ -22,6 +22,7 @@ Utilizzando Trident con Amazon FSX per NetApp ONTAP, puoi assicurarti che i clus
 
 
 
+[[requirements]]
 == Requisiti
 
 Oltre a link:../trident-get-started/requirements.html["Requisiti Trident"], per integrare FSX for ONTAP con Trident, hai bisogno di:
@@ -37,6 +38,7 @@ NOTE: Assicurarsi di seguire i passaggi di preparazione dei nodi richiesti per A
 
 
 
+[[considerations]]
 == Considerazioni
 
 * Volumi SMB:
@@ -55,6 +57,7 @@ NOTE: Se si specifica un ruolo IAM in Trident, è possibile omettere esplicitame
 
 
 
+[[authentication]]
 == Autenticazione
 
 Trident offre due modalità di autenticazione.
@@ -75,6 +78,7 @@ Per ulteriori informazioni sull'attivazione dell'autenticazione, fare riferiment
 
 
 
+[[tested-amazon-machine-images-amis]]
 == Immagini Amazon Machine testate (AMI)
 
 Il cluster EKS supporta vari sistemi operativi, ma AWS ha ottimizzato alcuni Amazon Machine Images (AMI) per container ed EKS. I seguenti AMI sono stati testati con Trident 24,10.
@@ -125,6 +129,7 @@ NOTE: Se il vostro AMI desiderato non è elencato qui, non significa che non è 
 
 
 
+[[find-more-information]]
 == Trova ulteriori informazioni
 
 * https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html["Documentazione di Amazon FSX per NetApp ONTAP"^]

@@ -16,6 +16,7 @@ L'operatore Trident consente di personalizzare l'installazione di Trident utiliz
 
 
 
+[[understanding-controller-pods-and-node-pods]]
 == Comprensione dei pod controller e dei pod di nodi
 
 Trident funziona come un singolo pod controller, più un pod di nodo su ciascun nodo di lavoro nel cluster. Il pod di nodo deve essere in esecuzione su qualsiasi host in cui si desidera montare potenzialmente un volume Trident.
@@ -28,6 +29,7 @@ Kubernetes link:https://kubernetes.io/docs/concepts/scheduling-eviction/assign-p
 
 
 
+[[configuration-options]]
 == Opzioni di configurazione
 
 
@@ -124,6 +126,7 @@ NOTE: Per ulteriori informazioni sulla formattazione dei parametri del pod, fare
 
 
 
+[[details-about-force-detach]]
 === Dettagli sulla forza di distacco
 
 Il distacco forzato è disponibile per `ontap-san` , `ontap-san-economy` , `ontap-nas` , E `ontap-nas-economy` soltanto. Prima di abilitare la disconnessione forzata, è necessario abilitare l'arresto non regolare del nodo (NGNS) sul cluster Kubernetes.  NGNS è abilitato per impostazione predefinita per Kubernetes 1.28 e versioni successive. Per ulteriori informazioni, fare riferimento a link:https://kubernetes.io/docs/concepts/cluster-administration/node-shutdown/#non-graceful-node-shutdown["Kubernetes: Shutdown del nodo non aggraziato"^] .
@@ -152,6 +155,7 @@ Quando l'integrità del nodo viene ripristinata e il tag viene rimosso, Trident:
 
 
 
+[[sample-configurations]]
 == Configurazioni di esempio
 
 È possibile utilizzare gli attributi in <<Opzioni di configurazione>> durante la definizione `TridentOrchestrator` per personalizzare l'installazione.

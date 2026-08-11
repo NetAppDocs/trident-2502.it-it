@@ -21,6 +21,7 @@ NOTE: Quando si ripristina un'applicazione, tutti i collegamenti di esecuzione c
 
 
 
+[[namespace-annotations-and-labels-during-restore-and-failover-operations]]
 == Annotazioni ed etichette del namespace durante le operazioni di ripristino e failover
 
 Durante le operazioni di ripristino e failover, vengono applicate etichette e annotazioni nel namespace di destinazione in modo che corrispondano alle etichette e alle annotazioni nel namespace di origine. Vengono aggiunte etichette o annotazioni dallo spazio dei nomi di origine che non esistono nello spazio dei nomi di destinazione e le etichette o annotazioni già esistenti vengono sovrascritte per corrispondere al valore dello spazio dei nomi di origine. Le etichette o le annotazioni presenti solo nello spazio dei nomi di destinazione rimangono invariate.
@@ -38,6 +39,7 @@ Se hai installato l'applicazione sorgente utilizzando Helm con `--create-namespa
 
 
 
+[[example]]
 === Esempio
 
 Nell'esempio seguente viene presentato uno spazio dei nomi di origine e destinazione, ciascuno con annotazioni ed etichette diverse. È possibile visualizzare lo stato dello spazio dei nomi di destinazione prima e dopo l'operazione e il modo in cui le annotazioni e le etichette vengono combinate o sovrascritte nello spazio dei nomi di destinazione.
@@ -100,6 +102,7 @@ La tabella seguente illustra lo stato dello spazio dei nomi di destinazione di e
 |===
 
 
+[[restore-from-a-backup-to-a-different-namespace]]
 == Ripristino da un backup a uno spazio dei nomi diverso
 
 Quando si ripristina un backup in uno spazio dei nomi diverso utilizzando un CR BackupRestore, Trident Protect ripristina l'applicazione in un nuovo spazio dei nomi e crea un CR dell'applicazione per l'applicazione ripristinata. Per proteggere l'applicazione ripristinata, creare backup o snapshot su richiesta oppure stabilire una pianificazione di protezione.
@@ -228,6 +231,7 @@ tridentctl-protect create backuprestore <my_restore_name> \
 ====
 
 
+[[restore-from-a-backup-to-the-original-namespace]]
 == Eseguire il ripristino da un backup nello spazio dei nomi originale
 
 È possibile ripristinare un backup nello spazio dei nomi originale in qualsiasi momento.
@@ -349,6 +353,7 @@ tridentctl-protect create backupinplacerestore <my_restore_name> \
 ====
 
 
+[[restore-from-a-backup-to-a-different-cluster]]
 == Ripristino da un backup a un cluster diverso
 
 In caso di problemi con il cluster originale, è possibile ripristinare un backup su un cluster diverso.
@@ -470,6 +475,7 @@ tridentctl-protect create backuprestore <restore_name> \
 ====
 
 
+[[restore-from-a-snapshot-to-a-different-namespace]]
 == Ripristino da uno snapshot a uno spazio dei nomi diverso
 
 È possibile ripristinare i dati da uno snapshot utilizzando un file di risorse personalizzato (CR) in uno spazio dei nomi diverso o nello spazio dei nomi di origine originale. Quando si ripristina uno snapshot in un namespace diverso utilizzando un CR SnapshotRestore, Trident Protect ripristina l'applicazione in un nuovo namespace e crea un CR per l'applicazione ripristinata. Per proteggere l'applicazione ripristinata, creare backup o snapshot su richiesta oppure stabilire una pianificazione di protezione.
@@ -602,6 +608,7 @@ tridentctl-protect create snapshotrestore <my_restore_name> \
 ====
 
 
+[[restore-from-a-snapshot-to-the-original-namespace]]
 == Ripristinare da uno snapshot allo spazio dei nomi originale
 
 È possibile ripristinare uno snapshot nello spazio dei nomi originale in qualsiasi momento.
@@ -718,6 +725,7 @@ tridentctl-protect create snapshotinplacerestore <my_restore_name> \
 ====
 
 
+[[check-the-status-of-a-restore-operation]]
 == Controllare lo stato di un'operazione di ripristino
 
 È possibile utilizzare la riga di comando per verificare lo stato di un'operazione di ripristino in corso, completata o non riuscita.
